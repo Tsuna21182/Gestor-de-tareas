@@ -1,4 +1,18 @@
 @import "tailwindcss";
 
 @theme {
+  /*Colors*/
+
+  --color-BlackBackground: #1a1b1c;
+  --color-BlackCardFond: #191b1c;
+  --color-Green: #02db3f;
+  --color-Fuchsia: #f701d0;
+  --color-GrayCardFond: #27292a;
+  --color-GrayCardFond2: #333537;
+  --color-Red: #ff5050;
+  --color-Orange: #de7223;
+
+  /*font*/
+
+  --font-display: "Lato", sans-serif;
 }
