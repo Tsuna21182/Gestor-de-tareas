@@ -1,24 +1,24 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import animacion from "../assets/Animation - 1748721423626.gif";
-import { useAuth } from "../Context/AuthContext";
+import useAuth from "../Hooks/useAuth";
 
 function AuthTrue() {
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { formUser } = useAuth();
 
   useEffect(() => {
-    if (!user) {
+    if (!formUser) {
       navigate("/");
       return;
     }
 
     const timer = setTimeout(() => {
       navigate("/dashboard");
-    }, 2000);
+    }, 3000);
 
     return () => clearTimeout(timer);
-  }, [navigate, user]);
+  }, [formUser, navigate]);
 
   return (
     <div className="flex justify-center items-center h-dvh bg-gray-200">

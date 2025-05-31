@@ -10,14 +10,14 @@ import LogoutButton from "../components/LogoutButton";
 import useAuth from "../Hooks/useAuth";
 
 function Dashboard() {
-  const { user } = useAuth();
-
   const activities = [
     { name: "Dashboard", icon: faDashboard, color: "text-blue-500" },
     { name: "Reports", icon: faChartBar, color: "text-green-500" },
     { name: "Filters", icon: faFilter, color: "text-purple-500" },
     { name: "Settings", icon: faGear, color: "text-yellow-500" },
   ];
+
+  const { logout } = useAuth();
 
   return (
     <div className="p-15 bg-gray-200 grid grid-cols-3 gap-10">
@@ -36,7 +36,7 @@ function Dashboard() {
               {activity.name}
             </button>
           ))}
-          <LogoutButton />
+          <LogoutButton logout={logout} />
         </div>
       </div>
       <div className="col-span-2 ">
@@ -52,7 +52,7 @@ function Dashboard() {
           </div>
         </div>
         <div className="mt-10 bg-white/80 p-5 rounded-xl">
-          <h4 className="text-2xl font-bold">Welcome {user.nombre}</h4>
+          <h4 className="text-2xl font-bold">Welcome perro</h4>
           <p className="mt-20">espacio para referencias</p>
         </div>
       </div>

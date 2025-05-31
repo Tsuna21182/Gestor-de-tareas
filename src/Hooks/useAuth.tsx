@@ -1,17 +1,22 @@
-// src/Hooks/useAuth.ts
 import { useState } from "react";
-import { useAuth as useAuthContext } from "../Context/AuthContext";
+import { useNavigate } from "react-router-dom";
+
+type User = {
+  nombre: string;
+  email: string;
+  password: string;
+};
 
 function useAuth() {
-  const { user, isAuthenticated, login, logout } = useAuthContext();
-
-  const [formUser, setFormUser] = useState({
-    nombre: "",
-    email: "",
-    password: "",
+  const [formUser, setFormUser] = useState<User>(() => {
+    const storedUser = localStorage.getItem("user");
+    return storedUser
+      ? JSON.parse(storedUser)
+      : { nombre: "", email: "", password: "" };
   });
 
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -21,24 +26,29 @@ function useAuth() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const emptyFields = Object.values(formUser).filter(
-      (valor) => valor.trim() === ""
-    );
-    if (emptyFields.length <= 0) {
-      setMessage("Haz Iniciado sesión.");
-      login(formUser);
+    const emptyFields = Object.values(formUser).filter((v) => v.trim() === "");
+
+    if (emptyFields.length === 0) {
+      localStorage.setItem("user", JSON.stringify(formUser));
+      setMessage("Iniciando sesión...");
+      navigate("/authtrue");
     } else {
-      setMessage("Usuario no verificado.");
+      setMessage("Completa todos los campos.");
     }
+  };
+
+  const logout = () => {
+    localStorage.removeItem("user");
+    setFormUser({ nombre: "", email: "", password: "" });
+    navigate("/");
   };
 
   return {
     handleChange,
     handleSubmit,
     message,
-    isAuthenticated,
+    formUser,
     logout,
-    user,
   };
 }
 
