@@ -20,7 +20,7 @@ function Dashboard() {
   const { logout } = useAuth();
 
   return (
-    <div className="p-15 bg-gray-200 grid grid-cols-3 gap-10">
+    <div className="p-15 grid grid-cols-3 gap-10">
       <div className="bg-white/80 rounded-xl p-5 flex flex-col">
         <h4 className="text-2xl font-bold">initech</h4>
         <div className="mt-10">

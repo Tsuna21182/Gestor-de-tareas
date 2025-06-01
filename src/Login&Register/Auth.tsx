@@ -14,7 +14,7 @@ function Auth({ handleChange, handleSubmit, message }: AuthProps) {
   const [isLogin, setIsLogin] = useState(true);
 
   return (
-    <div className="flex justify-center h-dvh items-center bg-gray-200">
+    <div className="flex justify-center h-dvh items-center">
       <div className="relative w-[900px] h-[600px] bg-white shadow-2xl rounded-2xl overflow-hidden">
         <div
           className={`absolute w-1/2 h-full top-0 transition-all duration-700 ease-in-out ${
