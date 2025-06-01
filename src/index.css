@@ -16,3 +16,7 @@
 
   --font-display: "Mooli", sans-serif;
 }
+
+.dark {
+  background-color: var(--color-BlackBackground);
+}

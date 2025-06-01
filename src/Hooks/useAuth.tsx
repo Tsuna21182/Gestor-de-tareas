@@ -1,45 +1,86 @@
-import { useState } from "react";
+import React from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  getAuth,
+  onAuthStateChanged,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signOut,
+  type User,
+  updateProfile,
+} from "firebase/auth";
+import appFirebase from "../Credenciales";
 
-type User = {
-  nombre: string;
-  email: string;
-  password: string;
-};
+const auth = getAuth(appFirebase);
 
 function useAuth() {
-  const [formUser, setFormUser] = useState<User>(() => {
-    const storedUser = localStorage.getItem("user");
-    return storedUser
-      ? JSON.parse(storedUser)
-      : { nombre: "", email: "", password: "" };
+  const [usuario, setUsuario] = useState<User | null>(null);
+  const [formUser, setFormUser] = useState({
+    nombre: "",
+    email: "",
+    password: "",
   });
 
   const [message, setMessage] = useState("");
+  const [isLogin, setIsLogin] = useState(true);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (userFirebase) => {
+      if (userFirebase) {
+        setUsuario(userFirebase);
+      } else {
+        setUsuario(null);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormUser((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const emptyFields = Object.values(formUser).filter((v) => v.trim() === "");
+    const { email, password } = formUser;
 
-    if (emptyFields.length === 0) {
-      localStorage.setItem("user", JSON.stringify(formUser));
-      setMessage("Iniciando sesión...");
-      navigate("/authtrue");
-    } else {
+    if (!email || !password) {
       setMessage("Completa todos los campos.");
+      return;
+    }
+
+    try {
+      if (isLogin) {
+        await signInWithEmailAndPassword(auth, email, password);
+      } else {
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        await updateProfile(userCredential.user, {
+          displayName: formUser.nombre,
+        });
+      }
+      setMessage("");
+      navigate("/authtrue");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setMessage(error.message);
+      } else {
+        setMessage("Ocurrio un error desconocido");
+      }
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    await signOut(auth);
     localStorage.removeItem("user");
     setFormUser({ nombre: "", email: "", password: "" });
+    setUsuario(null);
     navigate("/");
   };
 
@@ -48,7 +89,10 @@ function useAuth() {
     handleSubmit,
     message,
     formUser,
+    isLogin,
+    setIsLogin,
     logout,
+    usuario,
   };
 }
 

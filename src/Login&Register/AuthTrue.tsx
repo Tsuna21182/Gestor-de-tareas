@@ -1,24 +1,26 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import animacion from "../assets/Animation - 1748721423626.gif";
-import useAuth from "../Hooks/useAuth";
+
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 function AuthTrue() {
   const navigate = useNavigate();
-  const { formUser } = useAuth();
 
   useEffect(() => {
-    if (!formUser) {
-      navigate("/");
-      return;
-    }
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        navigate("/");
+      } else {
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 3000);
+      }
+    });
 
-    const timer = setTimeout(() => {
-      navigate("/dashboard");
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, [formUser, navigate]);
+    return () => unsubscribe();
+  }, [navigate]);
 
   return (
     <div className="flex justify-center items-center h-dvh bg-gray-200">

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle, faFacebook } from "@fortawesome/free-brands-svg-icons";
 
@@ -8,11 +7,17 @@ type AuthProps = {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   message: string;
+  isLogin: boolean;
+  setIsLogin: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-function Auth({ handleChange, handleSubmit, message }: AuthProps) {
-  const [isLogin, setIsLogin] = useState(true);
-
+function Auth({
+  handleChange,
+  handleSubmit,
+  message,
+  isLogin,
+  setIsLogin,
+}: AuthProps) {
   return (
     <div className="flex justify-center h-dvh items-center">
       <div className="relative w-[900px] h-[600px] bg-white shadow-2xl rounded-2xl overflow-hidden">
@@ -43,22 +48,23 @@ function Auth({ handleChange, handleSubmit, message }: AuthProps) {
                 ? "or use your username password"
                 : "or use your email for registration"}
             </p>
-            <input
-              type="text"
-              name="nombre"
-              placeholder="Username"
-              className="outline-0 bg-gray-200 py-2 px-5 text-2xl rounded-xl"
-              onChange={handleChange}
-            />
             {!isLogin && (
               <input
-                type="email"
-                name="email"
-                placeholder="Email"
+                type="text"
+                name="nombre"
+                placeholder="Nombre"
                 className="outline-0 bg-gray-200 py-2 px-5 text-2xl rounded-xl"
                 onChange={handleChange}
               />
             )}
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              className="outline-0 bg-gray-200 py-2 px-5 text-2xl rounded-xl"
+              onChange={handleChange}
+            />
+
             <input
               type="password"
               name="password"
