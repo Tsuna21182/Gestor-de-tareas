@@ -1,6 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle, faFacebook } from "@fortawesome/free-brands-svg-icons";
-
 import BtnBase from "../components/BtnBase";
 
 type AuthProps = {
@@ -19,8 +18,9 @@ function Auth({
   setIsLogin,
 }: AuthProps) {
   return (
-    <div className="flex justify-center h-dvh items-center">
-      <div className="relative w-[900px] h-[600px] bg-white shadow-2xl rounded-2xl overflow-hidden">
+    <div className="flex justify-center items-center h-dvh p-5 bg-white relative overflow-hidden">
+      {/* Tablet/Desktop layout */}
+      <div className="hidden md:block relative w-[900px] h-[600px] bg-white shadow-BlackCardFond shadow-2xl rounded-2xl overflow-hidden">
         <div
           className={`absolute w-1/2 h-full top-0 transition-all duration-700 ease-in-out ${
             isLogin ? "left-0" : "left-1/2"
@@ -64,7 +64,6 @@ function Auth({
               className="outline-0 bg-gray-200 py-2 px-5 text-2xl rounded-xl"
               onChange={handleChange}
             />
-
             <input
               type="password"
               name="password"
@@ -102,6 +101,59 @@ function Auth({
           </button>
         </div>
       </div>
+
+      {/* Mobile layout */}
+      <div className="md:hidden w-full max-w-sm px-6 py-12 bg-white relative rounded-2xl shadow-BlackCardFond shadow-2xl">
+        <form
+          className="flex flex-col justify-center items-center text-center gap-6"
+          onSubmit={handleSubmit}
+        >
+          <h2 className="text-3xl font-bold text-center mb-4">
+            {isLogin ? "Login" : "Register"}
+          </h2>
+          <div className="flex gap-3 my-4">
+            <FontAwesomeIcon
+              icon={faGoogle}
+              className="text-xl border-4 border-gray-200 p-3 rounded-xl transition-all duration-300 hover:scale-105 cursor-pointer"
+            />
+            <FontAwesomeIcon
+              icon={faFacebook}
+              className="text-xl border-4 border-gray-200 p-3 rounded-xl transition-all duration-300 hover:scale-105 cursor-pointer"
+            />
+          </div>
+          <input
+            type="text"
+            name="email"
+            placeholder="Email"
+            className="outline-none bg-gray-100 py-3 px-4 rounded-xl text-lg"
+            onChange={handleChange}
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            className="outline-none bg-gray-100 py-3 px-4 rounded-xl text-lg"
+            onChange={handleChange}
+          />
+          {!isLogin && (
+            <input
+              type="text"
+              name="nombre"
+              placeholder="Nombre"
+              className="outline-none bg-gray-100 py-3 px-4 rounded-xl text-lg"
+              onChange={handleChange}
+            />
+          )}
+          <BtnBase nombre={isLogin ? "Sign In" : "Sign Up"} type="submit" />
+        </form>
+        <button
+          onClick={() => setIsLogin(!isLogin)}
+          className="absolute top-4 right-4 text-xs bg-indigo-700 px-3 py-1 rounded-full text-white font-semibold cursor-pointer"
+        >
+          {isLogin ? "Register" : "Login"}
+        </button>
+      </div>
+
       {message && (
         <p className="absolute bottom-5 text-xl px-4 py-2 bg-black/80 text-white rounded-xl transition-opacity duration-300">
           {message}
